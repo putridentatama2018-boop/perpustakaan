@@ -1,0 +1,13 @@
+<div class="page-heading">
+  <div><h1>Daftar Buku</h1><p>Kelola data buku perpustakaan. Tambah, ubah, lihat detail, atau hapus data sesuai ketentuan.</p></div>
+  <div class="page-heading-actions">
+    <a href="<?= BASE_URL ?>/buku/create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> Tambah Buku</a>
+  </div>
+</div>
+<div class="card">
+  <div class="table-toolbar"><div class="section-label">Data Buku</div><div class="input-group input-group-sm table-search"><span class="input-group-text bg-white"><i class="bi bi-search"></i></span><input type="search" class="form-control" placeholder="Cari kode, judul, penulis..." oninput="filterTable(this,'bookTable')"></div></div>
+  <div class="table-responsive"><table id="bookTable" class="table mb-0 align-middle"><thead><tr><th>No</th><th>ID Buku</th><th>Judul</th><th>Penulis</th><th>Penerbit</th><th>Tahun</th><th>Stok</th><th>Status</th><th class="text-center">Aksi</th></tr></thead>
+  <tbody><?php if(empty($daftarBuku)): ?><tr><td colspan="9" class="text-center empty-state">Belum ada data buku.</td></tr><?php else: $no=1; foreach($daftarBuku as $buku): ?><tr data-searchable><td><?= $no++ ?></td><td><strong><?= htmlspecialchars($buku['kode_buku']) ?></strong></td><td><?= htmlspecialchars($buku['judul']) ?></td><td><?= htmlspecialchars($buku['penulis']) ?></td><td><?= htmlspecialchars($buku['penerbit']) ?></td><td><?= htmlspecialchars($buku['tahun_terbit']) ?></td><td><strong><?= (int)$buku['stok'] ?></strong></td><td><?php if($buku['status']==='tersedia'): ?><span class="badge badge-status bg-success-subtle text-success">Tersedia</span><?php else: ?><span class="badge badge-status bg-danger-subtle text-danger">Habis</span><?php endif; ?></td><td class="text-center"><div class="action-group"><a href="<?= BASE_URL ?>/buku/detail?id=<?= (int)$buku['id'] ?>" class="btn btn-sm btn-info text-white">Detail</a><a href="<?= BASE_URL ?>/buku/edit?id=<?= (int)$buku['id'] ?>" class="btn btn-sm btn-warning">Edit</a><form action="<?= BASE_URL ?>/buku/delete" method="POST" class="d-inline m-0" onsubmit="return confirm('Yakin ingin menghapus buku ini?');"><input type="hidden" name="id" value="<?= (int)$buku['id'] ?>"><button type="submit" class="btn btn-sm btn-danger">Hapus</button></form></div></td></tr><?php endforeach; endif; ?></tbody></table></div>
+  <div class="table-footer"><span>Menampilkan <?= count($daftarBuku) ?> data buku</span><span>Gunakan pencarian untuk menemukan data lebih cepat.</span></div>
+</div>
+<script>function filterTable(input,id){const q=input.value.toLowerCase().trim();document.querySelectorAll('#'+id+' tbody tr[data-searchable]').forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?'':'none');}</script>
